@@ -40,13 +40,23 @@ elif "6." in operation:
         if a >= 0: st.success(f"Результат: {math.sqrt(a)}")
         else: st.warning(f"Результат: {math.sqrt(-a)}i")
 
-elif operation in options[6:9]: # 7-9
+elif operation in options[6:9]: # 7-9 (ВИПРАВЛЕНО ТУТ)
     a = st.number_input("Введіть кут (градуси)")
     if st.button("Обчислити"):
         rad = math.radians(a)
-        if "7." in operation: st.success(f"Результат: {math.cos(rad)}")
-        elif "8." in operation: st.success(f"Результат: {math.sin(rad)}")
-        elif "9." in operation: st.success(f"Результат: {math.tan(rad)}")
+        if "7." in operation: 
+            # Додано round для виправлення помилки cos(90)
+            res = round(math.cos(rad), 10)
+            st.success(f"Результат: {res}")
+        elif "8." in operation: 
+            res = round(math.sin(rad), 10)
+            st.success(f"Результат: {res}")
+        elif "9." in operation: 
+            if a % 180 == 90:
+                st.error("Результат: Не існує (tg 90°)")
+            else:
+                res = round(math.tan(rad), 10)
+                st.success(f"Результат: {res}")
 
 elif "10." in operation:
     a = st.number_input("Введіть ціле число", step=1)
@@ -86,9 +96,12 @@ elif "15." in operation:
     eq_str = st.text_input("Рівняння (наприклад, x**2 - 4 = 0)")
     if st.button("Розв'язати"):
         x = sp.symbols('x')
-        left, right = eq_str.split("=")
-        sol = sp.solve(sp.sympify(left) - sp.sympify(right), x)
-        st.success(f"Розв’язок: {sol}")
+        if "=" in eq_str:
+            left, right = eq_str.split("=")
+            sol = sp.solve(sp.sympify(left) - sp.sympify(right), x)
+            st.success(f"Розв’язок: {sol}")
+        else:
+            st.error("Будь ласка, введіть рівняння зі знаком '='")
 
 elif "16." in operation:
     num = st.number_input("Кількість рівнянь", min_value=1, step=1)
@@ -114,7 +127,6 @@ elif "19." in operation:
     func_str = st.text_input("Функція y(x):", value="x**2")
     if st.button("Побудувати"):
         x_vals = np.linspace(-10, 10, 400)
-        # Використовуємо sympy для безпечного обчислення значень
         x_sym = sp.symbols('x')
         f_sym = sp.sympify(func_str)
         f_num = sp.lambdify(x_sym, f_sym, "numpy")
