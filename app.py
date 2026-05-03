@@ -20,14 +20,19 @@ options = [
 
 operation = st.selectbox("Оберіть операцію:", options)
 
-# Логіка для кожної операції
-if operation in options[0:5]:  # 1-5
+# --- СПЕЦІАЛЬНІ ОПЕРАЦІЇ (БЕЗ ПОЛІВ ВВОДУ) ---
+if "16." in operation:
+    st.info(f"Число π: {math.pi}")
+
+elif "17." in operation:
+    st.info(f"Число Єйлера e: {math.e}")
+
+# --- ОПЕРАЦІЇ З ДВОМА ЧИСЛАМИ (1-5) ---
+elif operation in options[0:5]:
     col1, col2 = st.columns(2)
-    # Додано key, щоб уникнути конфлікту віджетів
-    a = col1.number_input("Введіть число a", value=0.0, key="input_a")
-    b = col2.number_input("Введіть число b", value=0.0, key="input_b")
-    
-    if st.button("Обчислити", key="calc_button"):
+    a = col1.number_input("Введіть число a", value=0.0)
+    b = col2.number_input("Введіть число b", value=0.0)
+    if st.button("Обчислити"):
         if "1." in operation: st.success(f"Результат: {a + b}")
         elif "2." in operation: st.success(f"Результат: {a - b}")
         elif "3." in operation: st.success(f"Результат: {a * b}")
@@ -35,13 +40,14 @@ if operation in options[0:5]:  # 1-5
             st.success(f"Результат: {a / b if b != 0 else 'Помилка: ділення на нуль!'}")
         elif "5." in operation: st.success(f"Результат: {a ** b}")
 
+# --- ВСІ ІНШІ ОПЕРАЦІЇ ---
 elif "6." in operation:
     a = st.number_input("Введіть число")
     if st.button("Обчислити"):
         if a >= 0: st.success(f"Результат: {math.sqrt(a)}")
         else: st.warning(f"Результат: {math.sqrt(-a)}i")
 
-elif operation in options[6:9]: # 7-9
+elif operation in options[6:9]:
     a = st.number_input("Введіть кут (градуси)")
     if st.button("Обчислити"):
         rad = math.radians(a)
@@ -95,12 +101,6 @@ elif "15." in operation:
             st.success(f"Розв’язок: {sol}")
         else:
             st.error("Помилка: використовуйте '='")
-            
-elif "16." in operation:
-    st.info(f"Число π: {math.pi}")
-
-elif "17." in operation:
-    st.info(f"Число Єйлера e: {math.e}")
 
 elif "18." in operation:
     func_str = st.text_input("Функція y(x):", value="x**2")
@@ -110,7 +110,6 @@ elif "18." in operation:
         f_sym = sp.sympify(func_str)
         f_num = sp.lambdify(x_sym, f_sym, "numpy")
         y_vals = f_num(x_vals)
-        
         fig, ax = plt.subplots()
         ax.plot(x_vals, y_vals, label=f"y = {func_str}")
         ax.axhline(0, color='black', lw=1)
