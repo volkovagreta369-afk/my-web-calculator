@@ -40,23 +40,15 @@ elif "6." in operation:
         if a >= 0: st.success(f"Результат: {math.sqrt(a)}")
         else: st.warning(f"Результат: {math.sqrt(-a)}i")
 
-elif operation in options[6:9]: # 7-9 (ВИПРАВЛЕНО ТУТ)
+elif operation in options[6:9]: # 7-9 (Виправлено точність)
     a = st.number_input("Введіть кут (градуси)")
     if st.button("Обчислити"):
         rad = math.radians(a)
-        if "7." in operation: 
-            # Додано round для виправлення помилки cos(90)
-            res = round(math.cos(rad), 10)
-            st.success(f"Результат: {res}")
-        elif "8." in operation: 
-            res = round(math.sin(rad), 10)
-            st.success(f"Результат: {res}")
+        if "7." in operation: st.success(f"Результат: {round(math.cos(rad), 10)}")
+        elif "8." in operation: st.success(f"Результат: {round(math.sin(rad), 10)}")
         elif "9." in operation: 
-            if a % 180 == 90:
-                st.error("Результат: Не існує (tg 90°)")
-            else:
-                res = round(math.tan(rad), 10)
-                st.success(f"Результат: {res}")
+            if a % 180 == 90: st.error("Результат: Не існує")
+            else: st.success(f"Результат: {round(math.tan(rad), 10)}")
 
 elif "10." in operation:
     a = st.number_input("Введіть ціле число", step=1)
@@ -101,21 +93,23 @@ elif "15." in operation:
             sol = sp.solve(sp.sympify(left) - sp.sympify(right), x)
             st.success(f"Розв’язок: {sol}")
         else:
-            st.error("Будь ласка, введіть рівняння зі знаком '='")
+            st.error("Помилка: використовуйте '='")
 
-elif "16." in operation:
-    num = st.number_input("Кількість рівнянь", min_value=1, step=1)
-    vars_str = st.text_input("Змінні через пробіл (наприклад, x y)")
-    eqs_input = st.text_area("Рівняння (кожне з нового рядка, через =)")
+elif "16." in operation: # ВИПРАВЛЕНО: Система рівнянь
+    vars_str = st.text_input("Змінні через пробіл (наприклад, x y)", value="x y")
+    eqs_input = st.text_area("Рівняння (кожне з нового рядка, наприклад: x+y=10)")
     if st.button("Розв'язати систему"):
-        symbols = sp.symbols(vars_str.split())
-        eq_list = []
-        for line in eqs_input.split('\n'):
-            if "=" in line:
-                l, r = line.split("=")
-                eq_list.append(sp.sympify(l) - sp.sympify(r))
-        sol = sp.solve(eq_list, symbols)
-        st.success(f"Розв’язок: {sol}")
+        try:
+            symbols = sp.symbols(vars_str.split())
+            eq_list = []
+            for line in eqs_input.split('\n'):
+                if "=" in line:
+                    l, r = line.split("=")
+                    eq_list.append(sp.sympify(l) - sp.sympify(r))
+            sol = sp.solve(eq_list, symbols)
+            st.success(f"Розв’язок: {sol}")
+        except Exception as e:
+            st.error(f"Помилка: {e}")
 
 elif "17." in operation:
     st.info(f"Число π: {math.pi}")
