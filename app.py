@@ -95,21 +95,24 @@ elif "15." in operation:
         else:
             st.error("Помилка: використовуйте '='")
 
-elif "16." in operation: # ВИПРАВЛЕНО: тепер тут правильні поля для введення
-    vars_str = st.text_input("Змінні через пробіл", value="x y")
-    eqs_input = st.text_area("Рівняння (кожне з нового рядка)", value="x + y = 10\nx - y = 2")
+elif "16." in operation: # ВИПРАВЛЕНО: Два окремі рядки введення
+    eq1_str = st.text_input("Перше рівняння (наприклад, x + y = 10)")
+    eq2_str = st.text_input("Друге рівняння (наприклад, x - y = 2)")
+    
     if st.button("Розв'язати систему"):
         try:
-            symbols = sp.symbols(vars_str.split())
-            eq_list = []
-            for line in eqs_input.split('\n'):
-                if "=" in line:
-                    l, r = line.split("=")
-                    eq_list.append(sp.sympify(l) - sp.sympify(r))
-            sol = sp.solve(eq_list, symbols)
+            x, y = sp.symbols('x y')
+            # Обробка першого рівняння
+            l1, r1 = eq1_str.split("=")
+            e1 = sp.sympify(l1) - sp.sympify(r1)
+            # Обробка другого рівняння
+            l2, r2 = eq2_str.split("=")
+            e2 = sp.sympify(l2) - sp.sympify(r2)
+            
+            sol = sp.solve((e1, e2), (x, y))
             st.success(f"Розв’язок: {sol}")
         except Exception as e:
-            st.error(f"Помилка: {e}")
+            st.error("Будь ласка, введіть обидва рівняння зі знаком '='")
 
 elif "17." in operation:
     st.info(f"Число π: {math.pi}")
