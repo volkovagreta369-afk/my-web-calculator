@@ -94,7 +94,7 @@ elif "15." in operation:
             st.success(f"Розв’язок: {sol}")
         else:
             st.error("Помилка: використовуйте '='")
-
+            
 elif "16." in operation:
     st.info(f"Число π: {math.pi}")
 
