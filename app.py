@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Інженерний калькулятор", layout="centered")
 st.title("📟 Інженерний калькулятор")
 
-# Список операцій точно як у твоєму коді
+# Список операцій
 options = [
     "1. Додавання (+)", "2. Віднімання (-)", "3. Множення (*)", "4. Ділення (/)",
     "5. Степінь (^)", "6. Квадратний корінь (√)", "7. Косинус (cos)", "8. Синус (sin)",
@@ -40,7 +40,7 @@ elif "6." in operation:
         if a >= 0: st.success(f"Результат: {math.sqrt(a)}")
         else: st.warning(f"Результат: {math.sqrt(-a)}i")
 
-elif operation in options[6:9]: # 7-9 (Виправлено точність)
+elif operation in options[6:9]: # 7-9
     a = st.number_input("Введіть кут (градуси)")
     if st.button("Обчислити"):
         rad = math.radians(a)
@@ -95,9 +95,9 @@ elif "15." in operation:
         else:
             st.error("Помилка: використовуйте '='")
 
-elif "16." in operation: # ВИПРАВЛЕНО: Система рівнянь
-    vars_str = st.text_input("Змінні через пробіл (наприклад, x y)", value="x y")
-    eqs_input = st.text_area("Рівняння (кожне з нового рядка, наприклад: x+y=10)")
+elif "16." in operation: # ВИПРАВЛЕНО: тепер тут правильні поля для введення
+    vars_str = st.text_input("Змінні через пробіл", value="x y")
+    eqs_input = st.text_area("Рівняння (кожне з нового рядка)", value="x + y = 10\nx - y = 2")
     if st.button("Розв'язати систему"):
         try:
             symbols = sp.symbols(vars_str.split())
