@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Інженерний калькулятор", layout="centered")
 st.title("📟 Інженерний калькулятор")
 
-# Список операцій точно як у твоєму коді
+# Список операцій
 options = [
     "1. Додавання (+)", "2. Віднімання (-)", "3. Множення (*)", "4. Ділення (/)",
     "5. Степінь (^)", "6. Квадратний корінь (√)", "7. Косинус (cos)", "8. Синус (sin)",
@@ -23,10 +23,11 @@ operation = st.selectbox("Оберіть операцію:", options)
 # Логіка для кожної операції
 if operation in options[0:5]:  # 1-5
     col1, col2 = st.columns(2)
-    a = col1.number_input("Введіть число a", value=0.0)
-    b = col2.number_input("Введіть число b", value=0.0)
+    # Додано key, щоб уникнути конфлікту віджетів
+    a = col1.number_input("Введіть число a", value=0.0, key="input_a")
+    b = col2.number_input("Введіть число b", value=0.0, key="input_b")
     
-    if st.button("Обчислити"):
+    if st.button("Обчислити", key="calc_button"):
         if "1." in operation: st.success(f"Результат: {a + b}")
         elif "2." in operation: st.success(f"Результат: {a - b}")
         elif "3." in operation: st.success(f"Результат: {a * b}")
@@ -40,7 +41,7 @@ elif "6." in operation:
         if a >= 0: st.success(f"Результат: {math.sqrt(a)}")
         else: st.warning(f"Результат: {math.sqrt(-a)}i")
 
-elif operation in options[6:9]: # 7-9 (Виправлено точність)
+elif operation in options[6:9]: # 7-9
     a = st.number_input("Введіть кут (градуси)")
     if st.button("Обчислити"):
         rad = math.radians(a)
