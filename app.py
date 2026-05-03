@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Інженерний калькулятор", layout="centered")
 st.title("📟 Інженерний калькулятор")
 
-# Список операцій
+# Список операцій точно як у твоєму коді
 options = [
     "1. Додавання (+)", "2. Віднімання (-)", "3. Множення (*)", "4. Ділення (/)",
     "5. Степінь (^)", "6. Квадратний корінь (√)", "7. Косинус (cos)", "8. Синус (sin)",
@@ -40,7 +40,7 @@ elif "6." in operation:
         if a >= 0: st.success(f"Результат: {math.sqrt(a)}")
         else: st.warning(f"Результат: {math.sqrt(-a)}i")
 
-elif operation in options[6:9]: # 7-9
+elif operation in options[6:9]: # 7-9 (Виправлено точність)
     a = st.number_input("Введіть кут (градуси)")
     if st.button("Обчислити"):
         rad = math.radians(a)
@@ -95,32 +95,13 @@ elif "15." in operation:
         else:
             st.error("Помилка: використовуйте '='")
 
-elif "16." in operation: # ВИПРАВЛЕНО: Два окремі рядки введення
-    eq1_str = st.text_input("Перше рівняння (наприклад, x + y = 10)")
-    eq2_str = st.text_input("Друге рівняння (наприклад, x - y = 2)")
-    
-    if st.button("Розв'язати систему"):
-        try:
-            x, y = sp.symbols('x y')
-            # Обробка першого рівняння
-            l1, r1 = eq1_str.split("=")
-            e1 = sp.sympify(l1) - sp.sympify(r1)
-            # Обробка другого рівняння
-            l2, r2 = eq2_str.split("=")
-            e2 = sp.sympify(l2) - sp.sympify(r2)
-            
-            sol = sp.solve((e1, e2), (x, y))
-            st.success(f"Розв’язок: {sol}")
-        except Exception as e:
-            st.error("Будь ласка, введіть обидва рівняння зі знаком '='")
-
-elif "17." in operation:
+elif "16." in operation:
     st.info(f"Число π: {math.pi}")
 
-elif "18." in operation:
+elif "17." in operation:
     st.info(f"Число Єйлера e: {math.e}")
 
-elif "19." in operation:
+elif "18." in operation:
     func_str = st.text_input("Функція y(x):", value="x**2")
     if st.button("Побудувати"):
         x_vals = np.linspace(-10, 10, 400)
@@ -137,7 +118,7 @@ elif "19." in operation:
         ax.legend()
         st.pyplot(fig)
 
-elif "20." in operation:
+elif "19." in operation:
     a = st.number_input("a", value=1.0)
     b = st.number_input("b", value=0.0)
     c = st.number_input("c", value=0.0)
